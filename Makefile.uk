@@ -1,0 +1,125 @@
+#  SPDX-License-Identifier: BSD-3-Clause
+#
+#  openjpeg Makefile.uk
+#
+#  Authors: Esteban Martinez <esteban.martinez@csuc.cat>
+#
+#  Copyright (c) 2019, Consorci de Serveis Universitaris de Catalunya (CSUC). All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+#  THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib_s,libopenjpeg,$(CONFIG_LIBOPENJPEG)))
+
+################################################################################
+# Original sources
+################################################################################
+LIBOPENJPEG_VERSION=2.3.1
+LIBOPENJPEG_URL=https://github.com/python-pillow/pillow-depends/raw/master/openjpeg-$(LIBOPENJPEG_VERSION).tar.gz
+LIBOPENJPEG_PATCHDIR=$(LIBOPENJPEG_BASE)/patches
+LIBOPENJPEG_SUBDIR=openjpeg-$(LIBOPENJPEG_VERSION)
+$(eval $(call fetch,libopenjpeg,$(LIBOPENJPEG_URL)))
+$(eval $(call patch,libopenjpeg,$(LIBOPENJPEG_PATCHDIR),$(LIBOPENJPEG_SUBDIR)))
+
+################################################################################
+# Helpers
+################################################################################
+LIBOPENJPEG_EXTRACTED = $(LIBOPENJPEG_ORIGIN)/$(LIBOPENJPEG_SUBDIR)
+
+################################################################################
+# Library includes
+################################################################################
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_EXTRACTED)/src/lib
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_EXTRACTED)/src/bin/common
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_EXTRACTED)/build/src/lib
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_EXTRACTED)/build/src/lib/openjp2
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_EXTRACTED)/build/src/bin/common
+LIBOPENJPEG_COMMON_INCLUDES-y      += -I$(LIBOPENJPEG_BASE)/include
+
+CINCLUDES-$(CONFIG_LIBOPENJPEG)    += $(LIBOPENJPEG_COMMON_INCLUDES-y)
+CXXINCLUDES-$(CONFIG_LIBOPENJPEG)  += $(LIBOPENJPEG_COMMON_INCLUDES-y)
+
+LIBOPENJPEG_CINCLUDES   += -I$(LIBOPENJPEG_EXTRACTED)
+
+################################################################################
+# Global flags
+################################################################################
+# Suppressed flags
+LIBOPENJPEG_SUPPRESS_FLAGS += -Wno-unused-parameter \
+	-Wno-unused-variable -Wno-unused-value -Wno-unused-function \
+	-Wno-missing-field-initializers -Wno-implicit-fallthrough \
+	-Wno-misleading-indentation -Wno-stringop-truncation \
+	-Wno-strict-aliasing
+LIBOPENJPEG_CFLAGS-y   += $(LIBOPENJPEG_SUPPRESS_FLAGS) \
+	-Wno-pointer-to-int-cast -Wno-int-to-pointer-cast \
+	-Wno-misleading-indentation -Wno-stringop-truncation \
+	-Wno-strict-aliasing
+
+################################################################################
+# OPENJPEG src
+################################################################################
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/thread.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/bio.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/cio.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/dwt.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/event.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/image.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/invert.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/j2k.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/jp2.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/mct.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/mqc.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/openjpeg.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/opj_clock.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/pi.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/t1.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/t2.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/tcd.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/tgt.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/function_list.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/opj_malloc.c
+LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/sparse_array.c
+
+################################################################################
+# OPENJPEG prepare
+################################################################################
+# Run ./configure
+$(LIBOPENJPEG_EXTRACTED)/config.status: $(LIBOPENJPEG_BUILD)/.origin
+	$(call verbose_cmd,CONFIG,libopenjpeg: $(notdir $@), \
+		cd $(LIBOPENJPEG_EXTRACTED) && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release)
+
+LIBOPENJPEG_PREPARED_DEPS = \
+	$(LIBOPENJPEG_EXTRACTED)/config.status \
+
+$(LIBOPENJPEG_BUILD)/.prepared: $(LIBOPENJPEG_PREPARED_DEPS)
+
+UK_PREPARE += $(LIBOPENJPEG_BUILD)/.prepared

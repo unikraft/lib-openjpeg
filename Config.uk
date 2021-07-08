@@ -1,0 +1,11 @@
+config LIBOPENJPEG
+	bool "libopenjpeg - image compression standard"
+	default n
+	select LIBNOLIBC if !HAVE_LIBC
+	select LIBUKDEBUG
+    select LIBUKALLOC
+    select LIBPTHREAD_EMBEDDED
+    select LIBNEWLIBC
+
+if LIBOPENJPEG
+endif

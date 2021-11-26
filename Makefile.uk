@@ -42,8 +42,8 @@ $(eval $(call addlib_s,libopenjpeg,$(CONFIG_LIBOPENJPEG)))
 ################################################################################
 # Original sources
 ################################################################################
-LIBOPENJPEG_VERSION=2.3.1
-LIBOPENJPEG_URL=https://github.com/python-pillow/pillow-depends/raw/master/openjpeg-$(LIBOPENJPEG_VERSION).tar.gz
+LIBOPENJPEG_VERSION=2.4.0
+LIBOPENJPEG_URL=https://fossies.org/linux/misc/openjpeg-$(LIBOPENJPEG_VERSION).tar.gz
 LIBOPENJPEG_PATCHDIR=$(LIBOPENJPEG_BASE)/patches
 LIBOPENJPEG_SUBDIR=openjpeg-$(LIBOPENJPEG_VERSION)
 $(eval $(call fetch,libopenjpeg,$(LIBOPENJPEG_URL)))
@@ -115,7 +115,7 @@ LIBOPENJPEG_SRCS-y += $(LIBOPENJPEG_EXTRACTED)/src/lib/openjp2/sparse_array.c
 # Run ./configure
 $(LIBOPENJPEG_EXTRACTED)/config.status: $(LIBOPENJPEG_BUILD)/.origin
 	$(call verbose_cmd,CONFIG,libopenjpeg: $(notdir $@), \
-		cd $(LIBOPENJPEG_EXTRACTED) && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release)
+		cd $(LIBOPENJPEG_EXTRACTED) && mkdir build ; cd build && cmake .. -DCMAKE_BUILD_TYPE=Release)
 
 LIBOPENJPEG_PREPARED_DEPS = \
 	$(LIBOPENJPEG_EXTRACTED)/config.status \

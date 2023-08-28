@@ -1,0 +1,6 @@
+config LIBOPENJPEG
+    bool "OpenJPEG - JPEG 2000 image library"
+    depends on HAVE_LIBC
+    select LIBINTEL_INTRINSICS if ARCH_X86_64
+    select LIBCOMPILER_RT
+    default n
